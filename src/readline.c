@@ -24,7 +24,6 @@ char *readline(void)
 		if (c == EOF)
 		{
 			printf("\n[EE SHELL: Session terminated]\n");
-			//printf("PANIC: EOF on stdin\n");
 			exit(-1);
 		}
 		if (c == '\n')
