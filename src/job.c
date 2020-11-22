@@ -21,7 +21,6 @@ struct job* parse_command(char** command, char** envp){
 
     i = 0;
     while(command[i] != NULL){
-
         for(;command[i] != NULL; i++){
             if(command[i][0] == '|'){
                 command[i] = NULL;
@@ -61,7 +60,7 @@ int run_job(struct job* job, char** envp){
 
     /**
      * 3 cases possible:
-     *  1 : this is the head of the process list, therefore it cannot have input changed excepted by a file
+     *  1: this is the head of the process list, therefore it cannot have input changed excepted by a file
      *  2: the process is not the head nor the tail
      *  3: the process is the tail, then it should print on STDOUT or output if not NULL.
      */
@@ -87,7 +86,6 @@ int run_job(struct job* job, char** envp){
                 pipe(fd);
                 out_fd = fd[WRITE_END];
                 run_process(cur, envp, in_fd, out_fd);
-                //printf("DEBUG: %s with pid %d \n", cur->path, cur->pid);
                 close(out_fd);
                 in_fd = fd[READ_END];
             }
