@@ -145,7 +145,7 @@ int execute_builtin(struct process *p, char** envp){
 			pwd(p->argv);
 			break;
 		case PRINT_CMD:
-			print(p->argv);
+			print(envp);
 			break;
 		case SET_CMD:
 			set(p->argv + 1, envp);
