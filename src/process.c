@@ -36,7 +36,7 @@ struct process* build_process(char** command, char** envp){
     argv = command;
     
     if (path == NULL){
-        printf("EESHELL: command not found : %s\n", command[0]);
+        printf("EE SHELL: command not found : %s\n", command[0]);
         return NULL;
     }
 
@@ -44,13 +44,13 @@ struct process* build_process(char** command, char** envp){
 
     while (command[i] != NULL){
         if (command[i][0] == '>') {
-            if (command[i][1] == '>'){
-                output_flag =  O_CREAT|O_APPEND;
-            } else {
-                output_flag = O_CREAT|O_WRONLY; 
+            output_flag = O_CREAT|O_WRONLY; 
+            output = command[i+1];
+            if (command[i+1] != NULL && command[i+1][0] == '>'){
+                output_flag |=  O_APPEND;
+                output = command[i+2];
             }
             output_mode = S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH;
-            output = command[i+1];
             command[i] = NULL;
             break;
         } else if (command[i][0] == '<'){
