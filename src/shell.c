@@ -32,10 +32,11 @@ void check_zombie(){
             p = shell->jobs[i]->root;
             for(; p != NULL; p = p->next){
                 if (p->pid == pid)
-                        break;
+                        goto PROCESS_FOUND;
             }
         }
 
+        PROCESS_FOUND:
         // if exited then set it pid to -1
         if (WIFEXITED(status)) {
             p->pid = -1;
