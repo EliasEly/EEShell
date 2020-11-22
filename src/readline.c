@@ -23,7 +23,7 @@ char *readline(void)
 		char c = fgetc(stdin);
 		if (c == EOF)
 		{
-			printf("\nBye...\n");
+			printf("\n[EE SHELL: Session terminated]\n");
 			//printf("PANIC: EOF on stdin\n");
 			exit(-1);
 		}
