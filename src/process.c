@@ -36,7 +36,7 @@ struct process* build_process(char** command, char** envp){
     argv = command;
     
     if (path == NULL){
-        printf("PANIC: Can not find %s path\n", command[0]);
+        printf("EESHELL: command not found : %s\n", command[0]);
         return NULL;
     }
 
