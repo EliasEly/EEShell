@@ -10,7 +10,6 @@
 
 struct job* parse_command(char** command, char** envp){
     int mode = FOREGROUND_MODE;
-    int pgid = -1;
     struct process *root = NULL, *next = NULL;
 
     int i = 0;
@@ -49,7 +48,6 @@ struct job* parse_command(char** command, char** envp){
 
     struct job* job = (struct job*)malloc(sizeof(struct job));
     job->mode = mode;
-    job->pgid = pgid;
     job->root = root;
     job->status = NOT_LAUNCHED;
     return job;
@@ -116,9 +114,6 @@ int run_job(struct job* job, char** envp){
 
     job->status = RUNNING;
     
-    //FIXME : should set group pid for all the process
-    job->pgid = job->root->pid;
-
     if(job->mode == FOREGROUND_MODE){
         struct job *j = job;
         for(; j->root != NULL; j->root = j->root->next){
@@ -135,8 +130,9 @@ int run_job(struct job* job, char** envp){
     return BACKGROUND_MODE;
 }
 
+//FIXME: should print the id in the shell->jobs
 void print_job_status(struct job* job){
-    printf("[%d] %s", job->pgid, STRING_STATUS[job->status]);
+    printf("[%d] %s", job->root->pid, STRING_STATUS[job->status]);
 }
 
 void clear_job(struct job* job){

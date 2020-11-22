@@ -25,16 +25,35 @@ void check_zombie(){
     int i;
 
     while((pid = waitpid(-1, &status, WNOHANG)) > 0){
-        for(i = 0; shell->jobs[i] != NULL && shell->jobs[i]->pgid != pid && i < N_JOBS; i++);
         
-        if (WIFEXITED(status)) {
-            clear_job(shell->jobs[i]);
-            shell->jobs[i] = NULL;
-        } else if (WIFSTOPPED(status)) {
-            //update job status
-        } else if (WIFCONTINUED(status)) {
-            //update job status
+        // looking for the process
+        struct process* p = NULL;
+        for(i = 0; shell->jobs[i] != NULL && i < N_JOBS; i++){
+            p = shell->jobs[i]->root;
+            for(; p != NULL; p = p->next){
+                if (p->pid == pid)
+                        break;
+            }
         }
+
+        // if exited then set it pid to -1
+        if (WIFEXITED(status)) {
+            p->pid = -1;
+            int flag = shell->jobs[i]->root->pid;
+            for(p = shell->jobs[i]->root; p != NULL; p = p->next){
+                if(p->pid != -1)
+                    flag = p->pid;
+            }
+
+            //if all the pid of the job are equal to -1, it means the job is terminated and be removed
+            if (flag == -1){
+                clear_job(shell->jobs[i]);
+                shell->jobs[i] = NULL;
+            }
+
+        } else if (WIFSTOPPED(status))
+            shell->jobs[i]->status = INTERRUPTED;
+        
     }
 
 }

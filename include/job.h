@@ -25,7 +25,7 @@ static const char* STRING_STATUS[] = {
 };
 
 struct job {
-    int pgid;
+    //int pgid; it seems to be useless
     int mode;
     int status;
     struct process* root;
