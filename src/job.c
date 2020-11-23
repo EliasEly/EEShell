@@ -128,9 +128,8 @@ int run_job(struct job* job, char** envp){
     return BACKGROUND_MODE;
 }
 
-//FIXME: should print the id in the shell->jobs
-void print_job_status(struct job* job){
-    printf("[%d] %s", job->root->pid, STRING_STATUS[job->status]);
+void print_job_status(int id, struct job **jobs){
+    printf("[%d] %s", id, STRING_STATUS[jobs[id]->status]);
 }
 
 void clear_job(struct job* job){

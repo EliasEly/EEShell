@@ -5,7 +5,6 @@
 
 #define FOREGROUND_MODE 0
 #define BACKGROUND_MODE 1
-#define PIPELINE_MODE 2
 
 #define RUNNING 0
 #define DONE 1
@@ -35,7 +34,7 @@ struct job* parse_command(char** command, char** envp);
 
 int run_job(struct job* job, char** envp);
 
-void print_job_id(struct job* job);
+void print_job_id(int id, struct job** jobs);
 
 void clear_job(struct job* job);
 
