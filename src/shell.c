@@ -96,7 +96,7 @@ void loop_shell(char** envp){
     char* line;
     char** command;
     struct job* job;
-    int status;
+    int status, i;
 
 
     for(;;) {
@@ -112,13 +112,11 @@ void loop_shell(char** envp){
         if (job != NULL){
             status = run_job(job, envp);
             if (status == BACKGROUND_MODE){
-                int i;
                 for(i = 0; shell->jobs[i] != NULL && i < N_JOBS; i++)
                 ;
                     shell->jobs[i] = job;
             }
         }
-
 
         free(line);
         free(command);
