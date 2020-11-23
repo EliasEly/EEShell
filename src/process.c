@@ -110,6 +110,8 @@ void run_process(struct process* p, char** envp, int in_fd, int out_fd){
         exit(-1);
         break;    
     default:
+        if (in_fd != STDIN_FILENO)
+            close(in_fd);
         p->pid = pid;
         break;
     }
