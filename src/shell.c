@@ -59,7 +59,7 @@ void check_zombie(){
 
 }
 
-void init_shell(char** envp, char*** envp_copy){
+char** init_shell(char** envp){
     // it is preferable to use sigaction rather than signal but it seems to be a way harder.
     struct sigaction sa;
     sa.sa_handler = &handler;
@@ -72,18 +72,24 @@ void init_shell(char** envp, char*** envp_copy){
     signal(SIGTSTP, SIG_IGN);
     signal(SIGCONT, SIG_IGN);
 
-    /**envp_copy = (char**) malloc((envp_s)*sizeof(char*));
+    int envp_s = 0;
+	for (envp_s = 0; envp[envp_s] != NULL; envp_s++)
+    ; 
+    
+    char** m_envp = malloc((envp_s + 1) * sizeof(char *));
+	for (int i = 0; i < envp_s; i++) {
+		m_envp[i] = malloc(strlen(envp[i]) * sizeof(char));
+		m_envp[i] = strcpy(m_envp[i], envp[i]);
+	}
 
-    for(int i = 0; i < envp_s; i++){
-        *envp_copy[i] = (char*) malloc(strlen(envp[i]) * sizeof(char));
-        strcpy(*envp_copy[i], envp[i]);
-    }
-    *envp_copy[envp_s] = NULL;*/
+	m_envp[envp_s] = NULL;
 
     // set stdout without buffering so what is printed
 	// is printed immediately on the screen.
     setvbuf(stdout, NULL, _IONBF, 0);
 	setbuf(stdout, NULL);
+
+    return m_envp;
 }
 
 void loop_shell(char** envp){
@@ -126,18 +132,7 @@ int main(int argc, char** argv, char** envp){
     shell = malloc(sizeof(struct shell));
     shell->username = get_username();
 
-    int envp_s = 0;
-	for (envp_s = 0; envp[envp_s] != NULL; envp_s++)
-    ; 
-    
-    char** m_envp = malloc((envp_s + 1) * sizeof(char *));
-	for (int i = 0; i < envp_s; i++) {
-		m_envp[i] = malloc(strlen(envp[i]) * sizeof(char));
-		m_envp[i] = strcpy(m_envp[i], envp[i]);
-	}
-	m_envp[envp_s] = NULL;
-    
-    init_shell(envp, &m_envp);
+    char** m_envp = init_shell(envp);
     
     loop_shell(m_envp);
 
